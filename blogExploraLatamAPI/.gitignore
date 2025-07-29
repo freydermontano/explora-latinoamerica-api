@@ -422,3 +422,6 @@ FodyWeavers.xsd
 appsettings.json
 appsettings.Development.json
 appsettings.Secrets.json
+
+
+.vs/

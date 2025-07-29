@@ -10,7 +10,12 @@
         public string Author { get; set; } 
         public string urlHandle { get; set; } 
         public string FeatureImageUrl { get; set; } 
-        public bool IsVisible { get; set; }   
+        public bool IsVisible { get; set; }
+
+
+        // Relacion muchos a muchos
+        // Un post puede estar asociado a muchas categorias
+        public ICollection<Category> Categories { get; set; }
 
     }
 }

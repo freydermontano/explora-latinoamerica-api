@@ -22,6 +22,21 @@ namespace blogExploraLatamAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BlogPostCategory", b =>
+                {
+                    b.Property<Guid>("CategoriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("blogPostsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CategoriesId", "blogPostsId");
+
+                    b.HasIndex("blogPostsId");
+
+                    b.ToTable("BlogPostCategory");
+                });
+
             modelBuilder.Entity("CodeBlog.API.Models.Domain.BlogPost", b =>
                 {
                     b.Property<Guid>("Id")
@@ -80,6 +95,21 @@ namespace blogExploraLatamAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("BlogPostCategory", b =>
+                {
+                    b.HasOne("CodeBlog.API.Models.Domain.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CodeBlog.API.Models.Domain.BlogPost", null)
+                        .WithMany()
+                        .HasForeignKey("blogPostsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

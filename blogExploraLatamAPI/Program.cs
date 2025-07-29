@@ -1,3 +1,5 @@
+using blogExploraLatamAPI.Repositories.Implementations;
+using blogExploraLatamAPI.Repositories.Interfaces;
 using CodeBlog.API.Data;
 using CodeBlog.API.Repositories.Implementations;
 using CodeBlog.API.Repositories.Interfaces;
@@ -20,6 +22,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Configurar Repositorios
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 
 var app = builder.Build();
 

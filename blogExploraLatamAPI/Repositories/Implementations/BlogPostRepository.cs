@@ -1,6 +1,7 @@
 ﻿using blogExploraLatamAPI.Repositories.Interfaces;
 using CodeBlog.API.Data;
 using CodeBlog.API.Models.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace blogExploraLatamAPI.Repositories.Implementations
 {
@@ -23,6 +24,17 @@ namespace blogExploraLatamAPI.Repositories.Implementations
             await context.AddAsync(blogPost);
             await context.SaveChangesAsync();
             return blogPost;
+        }
+
+        public async Task<IEnumerable<BlogPost>> GetAllAsync()
+        {
+            return await context.BlogPosts.Include(x => x.Categories).ToListAsync();
+        }
+
+
+        public async Task<BlogPost?> GetByIdAsync(Guid id)
+        {
+            return await context.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

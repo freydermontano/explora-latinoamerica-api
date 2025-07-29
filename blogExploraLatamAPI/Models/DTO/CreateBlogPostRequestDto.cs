@@ -11,5 +11,8 @@
         public string FeatureImageUrl { get; set; }
         public bool IsVisible { get; set; }
 
+        //Relacion con categoria, para mostrar categorias
+        public Guid[] Categories { get; set; }
+
     }
 }
