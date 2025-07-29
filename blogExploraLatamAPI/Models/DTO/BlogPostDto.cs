@@ -1,4 +1,6 @@
-﻿namespace blogExploraLatamAPI.Models.Domain
+﻿using CodeBlog.API.Models.DTO;
+
+namespace blogExploraLatamAPI.Models.DTO
 {
     public class BlogPostDto
     {
@@ -11,5 +13,8 @@
         public string urlHandle { get; set; }
         public string FeatureImageUrl { get; set; }
         public bool IsVisible { get; set; }
+
+        //Devolver respuesta a la vista de categorias con clientes
+        public List<CategoryDto> Categories  { get; set; } = new List<CategoryDto>();
     }
 }
