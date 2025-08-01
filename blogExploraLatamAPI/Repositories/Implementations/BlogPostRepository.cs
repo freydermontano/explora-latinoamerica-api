@@ -26,6 +26,22 @@ namespace blogExploraLatamAPI.Repositories.Implementations
             return blogPost;
         }
 
+
+        public async Task<BlogPost?> DeleteAsync(Guid id)
+        {
+           var existingBlogPost = await  context.BlogPosts.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingBlogPost != null)
+            {
+                context.Remove(existingBlogPost);
+                await context.SaveChangesAsync();
+                return existingBlogPost;
+            }
+
+            return null;
+        }
+
+
         public async Task<IEnumerable<BlogPost>> GetAllAsync()
         {
             return await context.BlogPosts.Include(x => x.Categories).ToListAsync();
@@ -35,6 +51,22 @@ namespace blogExploraLatamAPI.Repositories.Implementations
         public async Task<BlogPost?> GetByIdAsync(Guid id)
         {
             return await context.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)
+        {
+            var existingBlogPost = await context.BlogPosts.Include(x =>x.Categories).FirstOrDefaultAsync(x =>x.Id == blogPost.Id);
+            if (existingBlogPost == null)
+            {
+                return null;
+            }
+
+            //Actualizar BlogPost
+            context.Entry(existingBlogPost).CurrentValues.SetValues(blogPost);
+            //Actualizar Categoria
+            existingBlogPost.Categories = blogPost.Categories;
+            await context.SaveChangesAsync();
+            return blogPost;
         }
     }
 }

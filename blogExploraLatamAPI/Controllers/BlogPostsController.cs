@@ -24,7 +24,7 @@ namespace blogExploraLatamAPI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> createBlogPost([FromBody] CreateBlogPostRequestDto request )
+        public async Task<IActionResult> createBlogPost([FromBody] CreateBlogPostRequestDto request)
         {
 
             //Convertir  DTO a la entidad del dominio
@@ -43,7 +43,7 @@ namespace blogExploraLatamAPI.Controllers
             };
 
             //Agregar la relacion de categoria en blogPost
-            foreach (var categoryGuid in request.Categories)   
+            foreach (var categoryGuid in request.Categories)
             {
                 var existingCategory = await categoryRepository.GetById(categoryGuid);
 
@@ -53,15 +53,13 @@ namespace blogExploraLatamAPI.Controllers
                 }
             }
 
-
-
-
             //Guardar  blogPost en la base de datos
-            blogPost =  await blogPostRepository.CreateAsync( blogPost );
+            blogPost = await blogPostRepository.CreateAsync(blogPost);
 
             // Mapear la entidad de dominio a un DTO de respuesta para el cliente
             var response = new BlogPostDto
             {
+                Id = blogPost.Id,
                 Title = blogPost.Title,
                 Content = blogPost.Content,
                 ShortDescription = blogPost.ShortDescription,
@@ -80,7 +78,7 @@ namespace blogExploraLatamAPI.Controllers
 
             };
 
-            return Ok( response );
+            return Ok(response);
         }
 
         [HttpGet]
@@ -94,12 +92,13 @@ namespace blogExploraLatamAPI.Controllers
             {
                 response.Add(new BlogPostDto
                 {
-                    Title= blogPost.Title,
+                    Id = blogPost.Id,
+                    Title = blogPost.Title,
                     Content = blogPost.Content,
                     ShortDescription = blogPost.ShortDescription,
                     PublishedDate = blogPost.PublishedDate,
                     Author = blogPost.Author,
-                    urlHandle= blogPost.urlHandle,
+                    urlHandle = blogPost.urlHandle,
                     FeatureImageUrl = blogPost.FeatureImageUrl,
                     IsVisible = blogPost.IsVisible,
                     //lista de categorias dto
@@ -111,7 +110,7 @@ namespace blogExploraLatamAPI.Controllers
                     }).ToList(),
                 });
             }
-                return Ok( response );
+            return Ok(response);
         }
 
 
@@ -150,8 +149,99 @@ namespace blogExploraLatamAPI.Controllers
                 }).ToList()
             };
 
-            return Ok( response );
+            return Ok(response);
         }
+
+
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> UpdateBlogPostById([FromRoute] Guid id, UpdateBlogPostRequestDto request)
+        {
+            var blogPost = new BlogPost
+            {
+                Id = id, // Necesario para la actualizacion
+                Author = request.Author,
+                Title = request.Title,
+                Content = request.Content,
+                ShortDescription = request.ShortDescription,
+                PublishedDate = request.PublishedDate,
+                urlHandle = request.urlHandle,
+                FeatureImageUrl = request.FeatureImageUrl,
+                IsVisible = request.IsVisible,
+                Categories = new List<Category>()
+            };
+
+            // Validar y asignar categorias
+            foreach (var categoryGuid in request.Categories)
+            {
+                var existingCategory = await categoryRepository.GetById(categoryGuid);
+                if (existingCategory != null)
+                {
+                    blogPost.Categories.Add(existingCategory);
+                }
+            }
+
+            // Actualizar en base de datos
+            var updatedBlogPost = await blogPostRepository.UpdateAsync(blogPost);
+
+            if (updatedBlogPost == null)
+            {
+                return NotFound();
+            }
+
+            // Construir DTO de respuesta
+            var response = new BlogPostDto
+            {
+                Id = updatedBlogPost.Id,
+                Author = updatedBlogPost.Author,
+                Title = updatedBlogPost.Title,
+                Content = updatedBlogPost.Content,
+                ShortDescription = updatedBlogPost.ShortDescription,
+                PublishedDate = updatedBlogPost.PublishedDate,
+                urlHandle = updatedBlogPost.urlHandle,
+                FeatureImageUrl = updatedBlogPost.FeatureImageUrl,
+                IsVisible = updatedBlogPost.IsVisible,
+                Categories = updatedBlogPost.Categories.Select(x => new CategoryDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+                }).ToList()
+            };
+
+            return Ok(response);
+        }
+
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBlogPost([FromBody] Guid id)
+        {
+
+            var deleteBlogPost =  await blogPostRepository.DeleteAsync(id);
+            if (deleteBlogPost == null)
+            {
+                return NotFound();
+            }
+
+            //Convertir modelo Dominio a Dto
+            var response = new BlogPostDto
+            {
+
+                Id = deleteBlogPost.Id,
+                Author = deleteBlogPost.Author,
+                Title = deleteBlogPost.Title,
+                Content = deleteBlogPost.Content,
+                ShortDescription = deleteBlogPost.ShortDescription,
+                urlHandle = deleteBlogPost.urlHandle,
+                FeatureImageUrl = deleteBlogPost.FeatureImageUrl,
+                IsVisible = deleteBlogPost.IsVisible,
+                PublishedDate = deleteBlogPost.PublishedDate,
+            };
+
+
+            return Ok(response);
+        }
+
 
     }
 }
