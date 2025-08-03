@@ -214,7 +214,8 @@ namespace blogExploraLatamAPI.Controllers
 
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteBlogPost([FromBody] Guid id)
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
         {
 
             var deleteBlogPost =  await blogPostRepository.DeleteAsync(id);

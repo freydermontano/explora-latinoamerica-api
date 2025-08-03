@@ -10,6 +10,5 @@ namespace blogExploraLatamAPI.Repositories.Interfaces
         Task<BlogPost?> UpdateAsync(BlogPost blogPost);
         Task<BlogPost?> DeleteAsync(Guid id);
 
-
     }
 }

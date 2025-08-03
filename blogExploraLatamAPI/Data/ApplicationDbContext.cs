@@ -1,4 +1,5 @@
-﻿using CodeBlog.API.Models.Domain;
+﻿using blogExploraLatamAPI.Models.Domain;
+using CodeBlog.API.Models.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeBlog.API.Data
@@ -12,6 +13,7 @@ namespace CodeBlog.API.Data
         // Define las entidades que se mapearan como tablas en la base de datos mediante Entity Framework Core
         public DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<BlogImage> BlogImages { get; set; }
 
     }
 }
