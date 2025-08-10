@@ -36,6 +36,7 @@ namespace blogExploraLatamAPI.Repositories.Implementations
 
 
             //Construir la URL accesible desde el navegador
+            // Obtenemos el contexto HTTP actual para construir la URL, https://localhost:7601/Images/imagen.jpg
             var httpRequest = httpContextAccessor.HttpContext.Request;
             var urlPath = $"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/Images/{blogImage.FileName}{blogImage.FileExtension}";
 
