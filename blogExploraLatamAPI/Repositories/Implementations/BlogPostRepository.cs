@@ -53,6 +53,11 @@ namespace blogExploraLatamAPI.Repositories.Implementations
             return await context.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<BlogPost> GetByIdUrlHandleAsync(string urlHandle)
+        {
+            return await context.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.urlHandle == urlHandle);
+        }
+
         public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)
         {
             var existingBlogPost = await context.BlogPosts.Include(x =>x.Categories).FirstOrDefaultAsync(x =>x.Id == blogPost.Id);
@@ -68,5 +73,11 @@ namespace blogExploraLatamAPI.Repositories.Implementations
             await context.SaveChangesAsync();
             return blogPost;
         }
+
+
+      
+
+
+    
     }
 }

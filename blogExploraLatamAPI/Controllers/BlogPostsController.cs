@@ -113,6 +113,44 @@ namespace blogExploraLatamAPI.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("{urlHadnle}")]
+        public async Task<IActionResult> getBlogPostByUrlHandle([FromRoute] string urlHadnle)
+        {
+            var blogPost = await blogPostRepository.GetByIdUrlHandleAsync(urlHadnle);
+
+            if (blogPost is null)
+            {
+                return NotFound();
+            }
+
+            //Convertir Modelo dominio a Dto
+            var response = new BlogPostDto
+            {
+
+                Id = blogPost.Id,
+                Title = blogPost.Title,
+                Content = blogPost.Content,
+                ShortDescription = blogPost.ShortDescription,
+                PublishedDate = blogPost.PublishedDate,
+                Author = blogPost.Author,
+                urlHandle = blogPost.urlHandle,
+                FeatureImageUrl = blogPost.FeatureImageUrl,
+                IsVisible = blogPost.IsVisible,
+
+                //Lista de categoria dto
+                Categories = blogPost.Categories.Select(x => new CategoryDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle,
+                }).ToList()
+            };
+
+            return Ok(response);
+
+        }
+
 
         [HttpGet]
         [Route("{id:Guid}")]

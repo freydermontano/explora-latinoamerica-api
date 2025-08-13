@@ -7,6 +7,7 @@ namespace blogExploraLatamAPI.Repositories.Interfaces
         Task<BlogPost> CreateAsync(BlogPost blogPost);
         Task<IEnumerable<BlogPost>> GetAllAsync();
         Task<BlogPost?> GetByIdAsync(Guid id);
+        Task<BlogPost> GetByIdUrlHandleAsync(string urlHandle);
         Task<BlogPost?> UpdateAsync(BlogPost blogPost);
         Task<BlogPost?> DeleteAsync(Guid id);
 
