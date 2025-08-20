@@ -2,6 +2,7 @@
 using CodeBlog.API.Models.Domain;
 using CodeBlog.API.Models.DTO;
 using CodeBlog.API.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeBlog.API.Controllers
