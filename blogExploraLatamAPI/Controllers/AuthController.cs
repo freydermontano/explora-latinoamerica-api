@@ -115,7 +115,6 @@ namespace blogExploraLatamAPI.Controllers
                 }
             }
 
-
             return ValidationProblem(ModelState);
 
         }

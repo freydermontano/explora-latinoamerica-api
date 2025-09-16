@@ -41,7 +41,7 @@ namespace blogExploraLatamAPI.Repositories.Implementations
             // Configuracion  del token
             var token = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
-                audience: configuration["Jwt:Audience"],
+                audience: configuration["Jwt:Audiencie"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(2),
                 signingCredentials: credentials

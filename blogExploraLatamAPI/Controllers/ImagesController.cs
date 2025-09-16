@@ -20,7 +20,6 @@ namespace blogExploraLatamAPI.Controllers
         }
 
 
-
         [HttpGet]
         public async Task<IActionResult> GetAllImages()
         {
@@ -82,7 +81,6 @@ namespace blogExploraLatamAPI.Controllers
 
             return BadRequest(ModelState);
         }
-
 
 
         // Metodo para validar la extension y el tamaño de un archivo subido

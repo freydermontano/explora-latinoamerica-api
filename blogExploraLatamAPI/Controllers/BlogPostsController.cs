@@ -3,6 +3,7 @@ using blogExploraLatamAPI.Repositories.Interfaces;
 using CodeBlog.API.Models.Domain;
 using CodeBlog.API.Models.DTO;
 using CodeBlog.API.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,17 +14,17 @@ namespace blogExploraLatamAPI.Controllers
     public class BlogPostsController : ControllerBase
     {
 
-
         private readonly IBlogPostRepository blogPostRepository;
         private readonly ICategoryRepository categoryRepository;
+
         public BlogPostsController(IBlogPostRepository blogPostRepository, ICategoryRepository categoryRepository)
         {
             this.blogPostRepository = blogPostRepository;
             this.categoryRepository = categoryRepository;
         }
 
-
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> createBlogPost([FromBody] CreateBlogPostRequestDto request)
         {
 
@@ -81,6 +82,7 @@ namespace blogExploraLatamAPI.Controllers
             return Ok(response);
         }
 
+
         [HttpGet]
         public async Task<IActionResult> GetAllBlogPosts()
         {
@@ -112,6 +114,7 @@ namespace blogExploraLatamAPI.Controllers
             }
             return Ok(response);
         }
+
 
         [HttpGet]
         [Route("{urlHadnle}")]
@@ -148,7 +151,6 @@ namespace blogExploraLatamAPI.Controllers
             };
 
             return Ok(response);
-
         }
 
 
@@ -193,6 +195,7 @@ namespace blogExploraLatamAPI.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateBlogPostById([FromRoute] Guid id, UpdateBlogPostRequestDto request)
         {
             var blogPost = new BlogPost
@@ -253,6 +256,7 @@ namespace blogExploraLatamAPI.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
         {
 
@@ -277,10 +281,8 @@ namespace blogExploraLatamAPI.Controllers
                 PublishedDate = deleteBlogPost.PublishedDate,
             };
 
-
             return Ok(response);
         }
-
 
     }
 }

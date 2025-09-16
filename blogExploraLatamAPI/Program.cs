@@ -47,18 +47,18 @@ builder.Services.AddIdentityCore<IdentityUser>()
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Políticas de contraseña
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = true;
+    options.Password.RequireUppercase = false;
     options.Password.RequiredLength = 8;
     options.Password.RequiredUniqueChars = 1;
     // Reglas de usuario comunes en proyectos reales
-    options.User.RequireUniqueEmail = true;
-    // Bloqueo (lockout) ante intentos fallidos
-    options.Lockout.AllowedForNewUsers = true;
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+    //options.User.RequireUniqueEmail = true;
+    //// Bloqueo (lockout) ante intentos fallidos
+    //options.Lockout.AllowedForNewUsers = true;
+    //options.Lockout.MaxFailedAccessAttempts = 5;
+    //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
 });
 
 // Autenticación JWT (Bearer)
@@ -70,17 +70,17 @@ builder.Services
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            AuthenticationType = "jwt",
+            AuthenticationType = "Jwt",
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
 
             //claves del appsettings
-            ValidIssuer = builder.Configuration["jwt:Issuer"],
-            ValidAudience = builder.Configuration["jwt:Audiencie"],
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audiencie"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["jwt:key"])),
+                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:key"])),
 
             ClockSkew = TimeSpan.Zero,
         };
@@ -96,6 +96,10 @@ builder.Services
 //    .AllowAnyMethod());
 //});
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+});
 
 
 

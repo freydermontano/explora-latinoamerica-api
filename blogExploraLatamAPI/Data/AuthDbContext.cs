@@ -11,12 +11,12 @@ namespace blogExploraLatamAPI.Data
 
 
 
-        // OnModelCreating, Se usa para crear datos iniciales (seed data), como roles y usuarios por defecto.
+        // OnModelCreating, Se usa para crear datos iniciales seed data, como roles y usuarios por defecto.
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            // IDs unicos para los roles (simulan GUIDs)
+            // IDs unicos para los roles 
             var readerRoleId = "5cff7a25-b488-457c-a66f-8aab78b583ab";
             var writeRoleId = "2ce2be33-a852-4de7-b0ec-48e672f3a502";
 
@@ -34,14 +34,14 @@ namespace blogExploraLatamAPI.Data
                 new IdentityRole()
                 {
                     Id = writeRoleId,
-                    Name ="write",
+                    Name ="Writer", 
                     NormalizedName = "Writer".ToUpper(),
                     ConcurrencyStamp = readerRoleId
                 }}
             };
 
 
-            // Guarda los roles en la base de datos cuando se crea/migra
+            // Guarda los roles en la base de datos cuando se crea o se migra
             builder.Entity<IdentityRole>().HasData(roles);
 
             // Crear un usuario administrador inicial

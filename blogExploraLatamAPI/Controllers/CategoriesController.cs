@@ -11,6 +11,7 @@ namespace CodeBlog.API.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
+
         private readonly ICategoryRepository categoryRepository;
 
         public CategoriesController(ICategoryRepository categoryRepository)
@@ -18,7 +19,9 @@ namespace CodeBlog.API.Controllers
             this.categoryRepository = categoryRepository;
         }
 
+
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)
         {
 
@@ -42,6 +45,7 @@ namespace CodeBlog.API.Controllers
 
             return Ok(response);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
@@ -68,6 +72,7 @@ namespace CodeBlog.API.Controllers
             return Ok(response);
         }
 
+
         [HttpGet]
         [Route("{id:Guid}")]
         public async Task<IActionResult> GetCategoryById([FromRoute] Guid id)
@@ -90,8 +95,10 @@ namespace CodeBlog.API.Controllers
             return Ok(response);
         }
 
+
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateCategory([FromRoute] Guid id, [FromBody] UpdateCategoryRequestDto request)
         {
             // Mapear el DTO recibido desde el cliente al modelo de dominio categoria
@@ -120,8 +127,10 @@ namespace CodeBlog.API.Controllers
             return Ok(response);
         }
 
+
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
         {
             var category = await categoryRepository.DeleteAsync(id);
@@ -138,13 +147,6 @@ namespace CodeBlog.API.Controllers
             };
 
             return Ok();
-        }
-
-
+        } 
     }
-
-
-    
-
-    
 }
