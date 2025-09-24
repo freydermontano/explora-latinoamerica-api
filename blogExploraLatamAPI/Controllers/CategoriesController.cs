@@ -21,7 +21,7 @@ namespace CodeBlog.API.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)
         {
 
@@ -48,10 +48,10 @@ namespace CodeBlog.API.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories()
+        public async Task<IActionResult> GetAllCategories([FromQuery] string? query)
         {
             //Obtebner tidas las categorias de la base de datos
-           var categories =  await categoryRepository.GetAllAsync();
+           var categories =  await categoryRepository.GetAllAsync(query);
 
             //Mapear Modelo Dominio a Dto
 

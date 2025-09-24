@@ -34,9 +34,26 @@ namespace CodeBlog.API.Repositories.Implementations
             await dbContext.SaveChangesAsync();
             return existingCategory;
         }
-        public async Task<IEnumerable<Category>> GetAllAsync()
+        public async Task<IEnumerable<Category>> GetAllAsync(string? query = null)
         {
-            return await dbContext.Categories.ToListAsync();
+            //Query 
+            var categories = dbContext.Categories.AsQueryable();
+
+            //Filtrando 
+            if (string.IsNullOrWhiteSpace(query) == false)
+            {
+                categories = categories.Where(x => x.Name.Contains(query));
+            }
+
+
+            //Ordenar 
+
+
+            //Paginacion 
+
+            return await categories.ToListAsync();
+
+            //return await dbContext.Categories.ToListAsync();
         }
         public async Task<Category?> GetById(Guid id)
         {
