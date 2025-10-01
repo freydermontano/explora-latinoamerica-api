@@ -48,16 +48,20 @@ namespace CodeBlog.API.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories([FromQuery] string? query)
+        public async Task<IActionResult> GetAllCategories(
+            [FromQuery] string? query, 
+            [FromQuery] string? sortBy, 
+            [FromQuery] string? sortDirection            
+            )
         {
             //Obtebner tidas las categorias de la base de datos
-           var categories =  await categoryRepository.GetAllAsync(query);
+           var categories =  await categoryRepository.GetAllAsync(query, sortBy, sortDirection);
 
-            //Mapear Modelo Dominio a Dto
 
             //Lista vacia para almacenar los objetos que se enviaran como respuesta(DTOs)
             var response = new List<CategoryDto>();
 
+            //Mapear Modelo Dominio a Dto
             //Recorrer cada categoria
             foreach (var category in categories)
             {
