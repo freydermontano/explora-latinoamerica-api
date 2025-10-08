@@ -51,11 +51,13 @@ namespace CodeBlog.API.Controllers
         public async Task<IActionResult> GetAllCategories(
             [FromQuery] string? query, 
             [FromQuery] string? sortBy, 
-            [FromQuery] string? sortDirection            
+            [FromQuery] string? sortDirection ,
+            [FromQuery] int? pageNumber,
+            [FromQuery] int? pageSize 
             )
         {
-            //Obtebner tidas las categorias de la base de datos
-           var categories =  await categoryRepository.GetAllAsync(query, sortBy, sortDirection);
+            //Obtebner todas las categorias de la base de datos
+           var categories =  await categoryRepository.GetAllAsync(query, sortBy, sortDirection, pageNumber, pageSize);
 
 
             //Lista vacia para almacenar los objetos que se enviaran como respuesta(DTOs)
@@ -151,6 +153,18 @@ namespace CodeBlog.API.Controllers
             };
 
             return Ok();
-        } 
+        }
+
+        //Total categorias
+        [HttpGet]
+        [Route("count")]
+        //[Authorize(Roles = "Writer")]
+        public async Task<IActionResult> getCatgeoriesTotal()
+        {
+            var countCategory = await categoryRepository.GetCount();
+            return Ok(countCategory);
+        }
+
+
     }
 }

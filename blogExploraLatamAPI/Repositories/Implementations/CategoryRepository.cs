@@ -2,6 +2,7 @@
 using CodeBlog.API.Models.Domain;
 using CodeBlog.API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CodeBlog.API.Repositories.Implementations
 {
@@ -34,7 +35,13 @@ namespace CodeBlog.API.Repositories.Implementations
             await dbContext.SaveChangesAsync();
             return existingCategory;
         }
-        public async Task<IEnumerable<Category>> GetAllAsync(string? query = null, string? sortBy = null, string? sortDirection = null)
+        public async Task<IEnumerable<Category>> GetAllAsync(
+            string? query = null, 
+            string? sortBy = null, 
+            string? sortDirection = null,
+            int? pageNumber =1,
+            int? pageSize = 100
+            )
         {
             //Query 
             var categories = dbContext.Categories.AsQueryable();
@@ -63,6 +70,10 @@ namespace CodeBlog.API.Repositories.Implementations
 
 
             //Paginacion 
+            var skipResult = (pageNumber - 1) * pageSize;
+            categories = categories.Skip(skipResult ?? 0).Take(pageSize ?? 100);
+
+
 
             return await categories.ToListAsync();
 
@@ -72,6 +83,7 @@ namespace CodeBlog.API.Repositories.Implementations
         {
            return await dbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
         }
+
         public async Task<Category?> UpdateAsync(Category category)
         {
             var existingCategory = await dbContext.Categories.FirstOrDefaultAsync(x => x.Id == category.Id);
@@ -86,6 +98,11 @@ namespace CodeBlog.API.Repositories.Implementations
             }
 
             return null;
+        }
+
+        public async Task<int> GetCount()
+        {
+            return await dbContext.Categories.CountAsync();
         }
     }
 }
